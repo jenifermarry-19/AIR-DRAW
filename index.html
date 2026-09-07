@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Air Draw | Futuristic Hand Drawing</title>
+
+    <!-- CSS -->
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         TITLE
+    ========================================== -->
+
+    <h1>✋ Jeni's AIR DRAW</h1>
+
+
+    <!-- =========================================
+         MAIN TOOLBAR
+    ========================================== -->
+
+    <div class="toolbar">
+
+
+        <!-- START CAMERA -->
+
+        <button id="startBtn">
+
+            ▶ Start Camera
+
+        </button>
+
+
+        <!-- STOP CAMERA -->
+
+        <button
+            id="stopBtn"
+            disabled
+        >
+
+            ⏹ Stop Camera
+
+        </button>
+
+
+        <!-- CLEAR CANVAS -->
+
+        <button id="clearBtn">
+
+            🧹 Clear
+
+        </button>
+        <button id="saveBtn">
+            💾 Save Image
+        </button>
+
+
+        <!-- COLOR PICKER -->
+
+        <label>
+
+            🎨 Color
+
+            <input
+                type="color"
+                id="colorPicker"
+                value="#00f5ff"
+            >
+
+        </label>
+
+
+        <!-- BRUSH SIZE -->
+
+        <label>
+
+            🖌 Brush
+
+            <input
+                type="range"
+                id="brushSize"
+                min="2"
+                max="30"
+                value="6"
+            >
+
+        </label>
+
+
+        <!-- STATUS -->
+
+        <span id="status">
+
+            Camera Off
+
+        </span>
+
+
+    </div>
+
+
+    <!-- =========================================
+         DRAWING AREA
+    ========================================== -->
+
+    <div class="drawing-container">
+
+
+        <!-- =====================================
+             MAIN HAND TOOL PALETTE
+
+             Open using PINCH gesture
+        ====================================== -->
+
+        <div
+            id="toolPalette"
+            class="tool-palette"
+        >
+
+
+            <!-- SHAPES -->
+
+            <button
+                id="toolShapes"
+                title="Shapes"
+            >
+
+                🔷
+
+            </button>
+
+
+            <!-- RED COLOR -->
+
+            <button
+                class="toolColor"
+                data-color="#ff0000"
+                title="Red"
+            >
+
+                🔴
+
+            </button>
+
+
+            <!-- GREEN COLOR -->
+
+            <button
+                class="toolColor"
+                data-color="#00ff00"
+                title="Green"
+            >
+
+                🟢
+
+            </button>
+
+
+            <!-- BLUE COLOR -->
+
+            <button
+                class="toolColor"
+                data-color="#0000ff"
+                title="Blue"
+            >
+
+                🔵
+
+            </button>
+
+
+            <!-- CYAN COLOR -->
+
+            <button
+                class="toolColor"
+                data-color="#00f5ff"
+                title="Cyan"
+            >
+
+                🔹
+
+            </button>
+
+
+            <!-- PURPLE COLOR -->
+
+            <button
+                class="toolColor"
+                data-color="#9d4edd"
+                title="Purple"
+            >
+
+                🟣
+
+            </button>
+
+
+            <!-- PINK COLOR -->
+
+            <button
+                class="toolColor"
+                data-color="#ff3cac"
+                title="Pink"
+            >
+
+                🩷
+
+            </button>
+
+
+            <!-- ERASER -->
+
+            <button
+                id="toolEraser"
+                title="Eraser"
+            >
+
+                🧽
+
+            </button>
+
+
+            <!-- UNDO -->
+
+            <button
+                id="toolUndo"
+                title="Undo"
+            >
+
+                ↩️
+
+            </button>
+
+
+        </div>
+
+
+        <!-- =====================================
+             SHAPE PALETTE
+        ====================================== -->
+
+        <div
+            id="shapePalette"
+            class="shape-palette"
+        >
+
+
+            <!-- LINE -->
+
+            <button
+                class="shapeTool"
+                data-shape="line"
+            >
+
+                📏 Line
+
+            </button>
+
+
+            <!-- CIRCLE -->
+
+            <button
+                class="shapeTool"
+                data-shape="circle"
+            >
+
+                ⭕ Circle
+
+            </button>
+
+
+            <!-- RECTANGLE -->
+
+            <button
+                class="shapeTool"
+                data-shape="rectangle"
+            >
+
+                ▭ Rectangle
+
+            </button>
+
+
+            <!-- TRIANGLE -->
+
+            <button
+                class="shapeTool"
+                data-shape="triangle"
+            >
+
+                △ Triangle
+
+            </button>
+
+
+            <!-- ARROW -->
+
+            <button
+                class="shapeTool"
+                data-shape="arrow"
+            >
+
+                ➡️ Arrow
+
+            </button>
+
+
+            <!-- BACK -->
+
+            <button
+                id="shapeBack"
+            >
+
+                ◀ Back
+
+            </button>
+
+
+        </div>
+
+
+        <!-- =====================================
+             CAMERA VIDEO
+        ====================================== -->
+
+        <video
+            id="video"
+            autoplay
+            playsinline
+        >
+
+        </video>
+
+
+        <!-- =====================================
+             DRAWING CANVAS
+        ====================================== -->
+
+        <canvas
+            id="canvas"
+        >
+
+        </canvas>
+
+
+        <!-- =====================================
+             FINGER TRACKING CURSOR
+        ====================================== -->
+
+        <div
+            id="fingerCursor"
+        >
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================================
+         MEDIAPIPE CAMERA UTILS
+    ========================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"
+    ></script>
+
+
+    <!-- =========================================
+         MEDIAPIPE HAND TRACKING
+    ========================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"
+    ></script>
+
+
+    <!-- =========================================
+         MAIN JAVASCRIPT
+    ========================================== -->
+
+    <script
+        src="script.js"
+    ></script>
+
+
+</body>
+
+</html>
